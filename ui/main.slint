@@ -1,8 +1,10 @@
-import { Button, HorizontalBox, TextEdit } from "std-widgets.slint";
+import { Button, HorizontalBox, TextEdit, ComboBox } from "std-widgets.slint";
 
 export component MainWindow inherits Window {
     in property <string> log;  // 游戏输出日志
-    callback new-game;  // 新建游戏回调
+    in-out property <string> game_mode: "经不了一典64方块";  // 游戏启动类型
+    in-out property <string> ua: "...";  // 游戏运行客户端类型
+    callback new-game;  // 新建游戏
     width: 800px;
     height: 600px;
     title: "rust craft 2d 游戏启动器";
@@ -17,6 +19,24 @@ export component MainWindow inherits Window {
             text: "rust craft 2d 游戏启动器";
             // color: green;
         }
+        // 模式选择
+        HorizontalBox {
+            alignment: center;
+            Text {
+                vertical-alignment: center;
+                horizontal-alignment: center;
+                text: "游戏模式：";
+                color: black;
+            }
+            ComboBox {
+                width: 150.0px;
+                height: 25.0px;
+                model: ["经不了一典64方块", "无尽方块"];
+                current-value: "经不了一典64方块";
+                selected(current-value)=>{game_mode = current_value}
+            }
+        }
+        
         // 启动按钮集
         HorizontalBox {
             alignment: center;
@@ -50,13 +70,13 @@ export component MainWindow inherits Window {
             Text {
                 vertical-alignment: center;
                 horizontal-alignment: center;
-                text: "当前启动器适配游戏版本: v0.3(demo)";
+                text: "当前启动器适配游戏版本: v0.3.1(demo)";
                 color: green;
             }
             Text {
                 vertical-alignment: center;
                 horizontal-alignment: center;
-                text: "客户端: Linux";
+                text: "客户端: " + ua;
                 color: green;
             }
         }
