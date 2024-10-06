@@ -1,0 +1,64 @@
+import { Button, HorizontalBox, TextEdit } from "std-widgets.slint";
+
+export component MainWindow inherits Window {
+    in property <string> log;  // 游戏输出日志
+    callback new-game;  // 新建游戏回调
+    width: 800px;
+    height: 600px;
+    title: "rust craft 2d 游戏启动器";
+    // icon: @image-url("icon.png");
+    VerticalLayout {
+        // alignment: center;
+        // 标题
+        Text {
+            vertical-alignment: center;
+            horizontal-alignment: center;
+            font-size: 30px;
+            text: "rust craft 2d 游戏启动器";
+            // color: green;
+        }
+        // 启动按钮集
+        HorizontalBox {
+            alignment: center;
+            Button {
+                text:"新建游戏";
+                height: 50px;
+                width: 150px;
+                clicked=>{root.new-game();}
+            }
+        }
+        // 游戏日志显示
+        Text {
+            vertical-alignment: center;
+            horizontal-alignment: center;
+            text: "游戏日志";
+            color: orange;
+        }
+        HorizontalLayout {
+            alignment: center;
+            width: parent.width;
+            height: parent.height * 0.5;
+            TextEdit {
+                text: root.log;
+                width: parent.width * 0.6;
+                height: parent.height;
+                read-only: false;
+            }
+        }
+        // 底部信息显示
+        HorizontalLayout {
+            Text {
+                vertical-alignment: center;
+                horizontal-alignment: center;
+                text: "当前启动器适配游戏版本: v0.3(demo)";
+                color: green;
+            }
+            Text {
+                vertical-alignment: center;
+                horizontal-alignment: center;
+                text: "客户端: Linux";
+                color: green;
+            }
+        }
+    }
+}
