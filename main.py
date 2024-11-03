@@ -7,6 +7,9 @@ from PySide6.QtCore import QFile, QIODevice, QObject
 from pathlib import Path
 import platform
 import subprocess
+import os
+
+LAUNCHER_VERSION = "rust-craft-2d 0.3.3 (demo)"
 
 class GameThread(QThread):
     update_game_data = Signal(str, int)
@@ -31,6 +34,7 @@ class MainWindow:
     new_game_type = "sandbox"
     def __init__(self):
         super(MainWindow, self).__init__()
+
         qfile = QFile("launcher-ui/mainwindow.ui")
         qfile.open(QFile.ReadOnly)
         qfile.close()
@@ -64,10 +68,20 @@ class MainWindow:
     
         system = platform.system()
         if system == "Windows":
+            game_version = os.popen("./rust-craft-2d.exe --version").read().splitlines()[0]
+            self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + "[launcher]info Starting...game version: " + game_version + " | launcher version: " + LAUNCHER_VERSION + "\n")
+            if LAUNCHER_VERSION != game_version:
+                self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + "[launcher]warn: The launcher version does not match the game version! This may cause errors!\n")
+                
             msg = "[launcher]info: running command: ./rust-craft-2d.exe --new " + self.ui.new_game_name.text() + " --gametype " + self.new_game_type
             self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + msg + "\n")
             self.start_game("./rust-craft-2d.exe --new " + self.ui.new_game_name.text() + " --gametype " + self.new_game_type, 0)
         elif system == "Linux":
+            game_version = os.popen("./rust-craft-2d --version").read().splitlines()[0]
+            self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + "[launcher]info Starting...game version: " + game_version + " | launcher version: " + LAUNCHER_VERSION + "\n")
+            if LAUNCHER_VERSION != game_version:
+                self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + "[launcher]warn: The launcher version does not match the game version! This may cause errors!\n")
+
             msg = "[launcher]info: running command: ./rust-craft-2d --new " + self.ui.new_game_name.text() + " --gametype " + self.new_game_type
             self.ui.new_game_log.setText(self.ui.new_game_log.toPlainText() + msg + "\n")
             self.start_game("./rust-craft-2d --new " + self.ui.new_game_name.text() + " --gametype " + self.new_game_type, 0)
@@ -81,10 +95,20 @@ class MainWindow:
             return
         system = platform.system()
         if system == "Windows":
+            game_version = os.popen("./rust-craft-2d.exe --version").read().splitlines()[0]
+            self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + "[launcher]info Starting...game version: " + game_version + " | launcher version: " + LAUNCHER_VERSION + "\n")
+            if LAUNCHER_VERSION != game_version:
+                self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + "[launcher]warn: The launcher version does not match the game version! This may cause errors!\n")
+
             msg = "[launcher]info: running command: ./rust-craft-2d.exe --open " + self.ui.open_game_name.currentItem().text()
             self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + msg + "\n")
             self.start_game("./rust-craft-2d.exe --open " + self.ui.open_game_name.currentItem().text(), 1)
         elif system == "Linux":
+            game_version = os.popen("./rust-craft-2d --version").read().splitlines()[0]
+            self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + "[launcher]info Starting...game version: " + game_version + " | launcher version: " + LAUNCHER_VERSION + "\n")
+            if LAUNCHER_VERSION != game_version:
+                self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + "[launcher]warn: The launcher version does not match the game version! This may cause errors!\n")
+
             msg = "[launcher]info: running command: ./rust-craft-2d --open " + self.ui.open_game_name.currentItem().text()
             self.ui.open_game_log.setText(self.ui.open_game_log.toPlainText() + msg + "\n")
             self.start_game("./rust-craft-2d --open " + self.ui.open_game_name.currentItem().text(), 1)
